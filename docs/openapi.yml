@@ -1,0 +1,15 @@
+openapi: 3.0.3
+info:
+  title: Fastify todo api
+  description: Fastify todo api Swagger
+  version: 1.0.0
+components:
+  securitySchemes:
+    apiKey:
+      type: apiKey
+      name: Cookie
+      in: header
+  schemas: {}
+paths: {}
+servers:
+  - url: localhost:3111
