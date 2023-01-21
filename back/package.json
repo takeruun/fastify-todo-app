@@ -6,8 +6,12 @@
     "build": "tsc -p tsconfig.json",
     "start": "node ./dist/index.js",
     "dev": "nodemon index.ts",
-    "typeorm": "typeorm-ts-node-commonjs",
-    "migration:run": "typeorm-ts-node-commonjs migration:run -d db/ormconfig.ts"
+    "typeorm": "typeorm-ts-node-commonjs -d db/ormconfig.ts",
+    "createDatabase": "ts-node db/create-database.ts",
+    "migrate:show": "yarn typeorm migration:show",
+    "migrate:create": "yarn typeorm migration:create db/migrations -n",
+    "migrate:generate": "yarn typeorm migration:generate db/migrations/migration",
+    "migration:run": "yarn typeorm migration:run"
   },
   "dependencies": {
     "@fastify/swagger": "^8.2.1",
@@ -17,12 +21,12 @@
     "fastify": "^4.10.2",
     "fastify-plugin": "^4.4.0",
     "mysql": "^2.18.1",
-    "pg": "^8.4.0",
     "reflect-metadata": "^0.1.13",
     "typeorm": "0.3.11",
     "uuid": "^9.0.0"
   },
   "devDependencies": {
+    "@types/mysql": "^2.15.21",
     "@types/node": "^16.11.10",
     "nodemon": "^2.0.20",
     "ts-node": "10.7.0"
