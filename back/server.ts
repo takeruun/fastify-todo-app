@@ -1,9 +1,13 @@
 import fastify from 'fastify';
 import fastifySwagger from '@fastify/swagger';
 import swaggerUi from '@fastify/swagger-ui';
+import cors from '@fastify/cors';
 import { writeFileSync } from 'fs';
+import fp from './db';
+import { setRoutes } from './routes';
 
 const server = fastify({ logger: true });
+server.register(fp);
 
 server.register(fastifySwagger, {
   openapi: {
@@ -39,6 +43,13 @@ server.register(swaggerUi, {
   routePrefix: '/docs',
   staticCSP: true,
 });
+
+server.register(cors, {
+  origin: ['http://localhost:3000'],
+  credentials: true,
+});
+
+setRoutes(server);
 
 const setYml = async () => {
   // generate sjon
