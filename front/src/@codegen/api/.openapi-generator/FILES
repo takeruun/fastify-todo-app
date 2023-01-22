@@ -1,0 +1,16 @@
+.gitignore
+.npmignore
+.openapi-generator-ignore
+api.ts
+api/auth-api.ts
+api/todo-api.ts
+base.ts
+common.ts
+configuration.ts
+git_push.sh
+index.ts
+model/auth-sign-up-post-request.ts
+model/auth-sign-up-post200-response.ts
+model/index.ts
+model/todo-get-request.ts
+model/todo-get200-response-inner.ts

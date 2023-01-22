@@ -10,6 +10,107 @@ components:
       name: Cookie
       in: header
   schemas: {}
-paths: {}
+paths:
+  /auth/sign_up:
+    post:
+      tags:
+        - auth
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - email
+                - password
+              properties:
+                name:
+                  type: string
+                email:
+                  type: string
+                password:
+                  type: string
+        required: true
+      responses:
+        "200":
+          description: Default Response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: string
+                  name:
+                    type: string
+  /auth/info:
+    get:
+      tags:
+        - auth
+      responses:
+        "200":
+          description: Default Response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: string
+                  name:
+                    type: string
+  /todo/:
+    get:
+      tags:
+        - todo
+      responses:
+        "200":
+          description: Default Response
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    id:
+                      type: string
+                    title:
+                      type: string
+                    description:
+                      type: string
+    post:
+      tags:
+        - todo
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - userId
+                - title
+              properties:
+                userId:
+                  type: string
+                title:
+                  type: string
+                description:
+                  type: string
+        required: true
+      responses:
+        "200":
+          description: Default Response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: string
+                  title:
+                    type: string
+                  description:
+                    type: string
 servers:
   - url: localhost:3111
