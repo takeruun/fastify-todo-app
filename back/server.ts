@@ -18,15 +18,16 @@ server.register(fastifySwagger, {
     },
     servers: [
       {
-        url: 'localhost:3111',
+        url: 'http://localhost:31111',
       },
     ],
     components: {
+      schemas: {},
       securitySchemes: {
-        apiKey: {
+        cookie: {
           type: 'apiKey',
-          name: 'Cookie',
-          in: 'header',
+          in: 'cookie',
+          name: '_fastify_todo_session_id',
         },
       },
     },

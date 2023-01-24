@@ -5,6 +5,7 @@ import db from '../../../db/ormconfig';
 export const opts = {
   schema: {
     tags: ['auth'],
+    operationId: 'sign-up',
     body: {
       type: 'object',
       required: ['email', 'password'],

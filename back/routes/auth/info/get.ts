@@ -5,6 +5,8 @@ import server from '../../../server';
 export const opts = {
   schema: {
     tags: ['auth'],
+    security: [{ cookie: [] }],
+    operationId: 'get-my-info',
     response: {
       200: {
         type: 'object',

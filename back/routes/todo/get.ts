@@ -5,6 +5,7 @@ import db from '../../db/ormconfig';
 export const opts = {
   schema: {
     tags: ['todo'],
+    security: [{ cookie: [] }],
     response: {
       200: {
         type: 'array',

@@ -6,6 +6,7 @@ import db from '../../db/ormconfig';
 export const option = {
   schema: {
     tags: ['todo'],
+    security: [{ cookie: [] }],
     body: {
       type: 'object',
       required: ['userId', 'title'],
