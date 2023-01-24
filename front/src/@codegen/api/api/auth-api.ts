@@ -21,9 +21,9 @@ import { DUMMY_BASE_URL, assertParamExists, setApiKeyToObject, setBasicAuthToObj
 // @ts-ignore
 import { BASE_PATH, COLLECTION_FORMATS, RequestArgs, BaseAPI, RequiredError } from '../base';
 // @ts-ignore
-import { AuthSignUpPost200Response } from '../model';
+import { SignUp200Response } from '../model';
 // @ts-ignore
-import { AuthSignUpPostRequest } from '../model';
+import { SignUpRequest } from '../model';
 /**
  * AuthApi - axios parameter creator
  * @export
@@ -35,7 +35,7 @@ export const AuthApiAxiosParamCreator = function (configuration?: Configuration)
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        authInfoGet: async (options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+        getMyInfo: async (options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
             const localVarPath = `/auth/info`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
@@ -61,13 +61,13 @@ export const AuthApiAxiosParamCreator = function (configuration?: Configuration)
         },
         /**
          * 
-         * @param {AuthSignUpPostRequest} authSignUpPostRequest 
+         * @param {SignUpRequest} signUpRequest 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        authSignUpPost: async (authSignUpPostRequest: AuthSignUpPostRequest, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
-            // verify required parameter 'authSignUpPostRequest' is not null or undefined
-            assertParamExists('authSignUpPost', 'authSignUpPostRequest', authSignUpPostRequest)
+        signUp: async (signUpRequest: SignUpRequest, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'signUpRequest' is not null or undefined
+            assertParamExists('signUp', 'signUpRequest', signUpRequest)
             const localVarPath = `/auth/sign_up`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
@@ -87,7 +87,7 @@ export const AuthApiAxiosParamCreator = function (configuration?: Configuration)
             setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
-            localVarRequestOptions.data = serializeDataIfNeeded(authSignUpPostRequest, localVarRequestOptions, configuration)
+            localVarRequestOptions.data = serializeDataIfNeeded(signUpRequest, localVarRequestOptions, configuration)
 
             return {
                 url: toPathString(localVarUrlObj),
@@ -109,18 +109,18 @@ export const AuthApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async authInfoGet(options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<AuthSignUpPost200Response>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.authInfoGet(options);
+        async getMyInfo(options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<SignUp200Response>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.getMyInfo(options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
         /**
          * 
-         * @param {AuthSignUpPostRequest} authSignUpPostRequest 
+         * @param {SignUpRequest} signUpRequest 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async authSignUpPost(authSignUpPostRequest: AuthSignUpPostRequest, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<AuthSignUpPost200Response>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.authSignUpPost(authSignUpPostRequest, options);
+        async signUp(signUpRequest: SignUpRequest, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<SignUp200Response>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.signUp(signUpRequest, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
     }
@@ -138,17 +138,17 @@ export const AuthApiFactory = function (configuration?: Configuration, basePath?
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        authInfoGet(options?: any): AxiosPromise<AuthSignUpPost200Response> {
-            return localVarFp.authInfoGet(options).then((request) => request(axios, basePath));
+        getMyInfo(options?: any): AxiosPromise<SignUp200Response> {
+            return localVarFp.getMyInfo(options).then((request) => request(axios, basePath));
         },
         /**
          * 
-         * @param {AuthSignUpPostRequest} authSignUpPostRequest 
+         * @param {SignUpRequest} signUpRequest 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        authSignUpPost(authSignUpPostRequest: AuthSignUpPostRequest, options?: any): AxiosPromise<AuthSignUpPost200Response> {
-            return localVarFp.authSignUpPost(authSignUpPostRequest, options).then((request) => request(axios, basePath));
+        signUp(signUpRequest: SignUpRequest, options?: any): AxiosPromise<SignUp200Response> {
+            return localVarFp.signUp(signUpRequest, options).then((request) => request(axios, basePath));
         },
     };
 };
@@ -166,18 +166,18 @@ export class AuthApi extends BaseAPI {
      * @throws {RequiredError}
      * @memberof AuthApi
      */
-    public authInfoGet(options?: AxiosRequestConfig) {
-        return AuthApiFp(this.configuration).authInfoGet(options).then((request) => request(this.axios, this.basePath));
+    public getMyInfo(options?: AxiosRequestConfig) {
+        return AuthApiFp(this.configuration).getMyInfo(options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
      * 
-     * @param {AuthSignUpPostRequest} authSignUpPostRequest 
+     * @param {SignUpRequest} signUpRequest 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof AuthApi
      */
-    public authSignUpPost(authSignUpPostRequest: AuthSignUpPostRequest, options?: AxiosRequestConfig) {
-        return AuthApiFp(this.configuration).authSignUpPost(authSignUpPostRequest, options).then((request) => request(this.axios, this.basePath));
+    public signUp(signUpRequest: SignUpRequest, options?: AxiosRequestConfig) {
+        return AuthApiFp(this.configuration).signUp(signUpRequest, options).then((request) => request(this.axios, this.basePath));
     }
 }

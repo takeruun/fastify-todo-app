@@ -48,6 +48,8 @@ export const TodoApiAxiosParamCreator = function (configuration?: Configuration)
             const localVarHeaderParameter = {} as any;
             const localVarQueryParameter = {} as any;
 
+            // authentication cookie required
+
 
     
             setSearchParams(localVarUrlObj, localVarQueryParameter);

@@ -17,19 +17,19 @@
 /**
  * 
  * @export
- * @interface AuthSignUpPost200Response
+ * @interface SignUp200Response
  */
-export interface AuthSignUpPost200Response {
+export interface SignUp200Response {
     /**
      * 
      * @type {string}
-     * @memberof AuthSignUpPost200Response
+     * @memberof SignUp200Response
      */
     'id'?: string;
     /**
      * 
      * @type {string}
-     * @memberof AuthSignUpPost200Response
+     * @memberof SignUp200Response
      */
     'name'?: string;
 }

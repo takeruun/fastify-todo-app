@@ -17,25 +17,25 @@
 /**
  * 
  * @export
- * @interface AuthSignUpPostRequest
+ * @interface SignUpRequest
  */
-export interface AuthSignUpPostRequest {
+export interface SignUpRequest {
     /**
      * 
      * @type {string}
-     * @memberof AuthSignUpPostRequest
+     * @memberof SignUpRequest
      */
     'name'?: string;
     /**
      * 
      * @type {string}
-     * @memberof AuthSignUpPostRequest
+     * @memberof SignUpRequest
      */
     'email': string;
     /**
      * 
      * @type {string}
-     * @memberof AuthSignUpPostRequest
+     * @memberof SignUpRequest
      */
     'password': string;
 }

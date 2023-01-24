@@ -4,15 +4,16 @@ info:
   description: Fastify todo api Swagger
   version: 1.0.0
 components:
-  securitySchemes:
-    apiKey:
-      type: apiKey
-      name: Cookie
-      in: header
   schemas: {}
+  securitySchemes:
+    cookie:
+      type: apiKey
+      in: cookie
+      name: _fastify_todo_session_id
 paths:
   /auth/sign_up:
     post:
+      operationId: sign-up
       tags:
         - auth
       requestBody:
@@ -45,8 +46,11 @@ paths:
                     type: string
   /auth/info:
     get:
+      operationId: get-my-info
       tags:
         - auth
+      security:
+        - cookie: []
       responses:
         "200":
           description: Default Response
@@ -63,6 +67,8 @@ paths:
     get:
       tags:
         - todo
+      security:
+        - cookie: []
       responses:
         "200":
           description: Default Response
@@ -98,6 +104,8 @@ paths:
                 description:
                   type: string
         required: true
+      security:
+        - cookie: []
       responses:
         "200":
           description: Default Response
@@ -113,4 +121,4 @@ paths:
                   description:
                     type: string
 servers:
-  - url: localhost:3111
+  - url: http://localhost:31111
