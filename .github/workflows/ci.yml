@@ -31,7 +31,7 @@ jobs:
           -e MYSQL_ROOT_PASSWORD=password
           --entrypoint sh mysql:8 -c "exec docker-entrypoint.sh mysqld --default-authentication-plugin=mysql_native_password"
         volumes:
-          - $PWD/initial-data:/var/lib/mysql
+          - $PWD/mysql:/var/lib/mysql
     steps:
       - name: Checkout
         uses: actions/checkout@v3
@@ -40,17 +40,16 @@ jobs:
 
       - name: Typeorm
         run: |
-          mkdir initial-data
           yarn workspace back createDatabase
           yarn workspace back migration:run
 
-      - run: ls -l initial-data
+      - run: ls -l mysql
 
       - name: Upload artifacts
         uses: actions/upload-artifact@v2
         with:
           name: initial-data
-          path: initial-data
+          path: mysql
 
   backend-test:
     needs: prepare-db
