@@ -23,6 +23,7 @@ jobs:
           - 3306:3306
         env:
           MYSQL_ROOT_PASSWORD: password
+        command: mysqld --default-authentication-plugin=mysql_native_password
         options: >-
           --health-cmd "mysqladmin ping"
           --health-interval 10s
@@ -58,6 +59,7 @@ jobs:
           - 3306:3306
         env:
           MYSQL_ROOT_PASSWORD: password
+        command: mysqld --default-authentication-plugin=mysql_native_password
         options: >-
           --health-cmd "mysqladmin ping"
           --health-interval 10s
