@@ -1,0 +1,21 @@
+name: Setup for Node CI
+
+runs:
+  using: 'composite'
+  steps:
+    - uses: actions/setup-node@v3
+      with:
+        node-version: '16.17.1'
+
+    - uses: actions/cache@v3
+      id: cache-root
+      with:
+        path: ./node_modules
+        key: ${{ runner.os }}-root-${{ hashFiles('**/yarn.lock') }}
+        restore-keys: |
+          ${{ runner.os }}-root-
+
+    - name: Install dependencies
+      if: steps.cache-root.outputs.cache-hit != 'true'
+      run: yarn install
+      shell: bash

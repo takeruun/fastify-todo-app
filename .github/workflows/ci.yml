@@ -1,0 +1,75 @@
+name: CI
+
+on:
+  push:
+    branches-ignore:
+      - main
+      - develop
+
+jobs:
+  prepare-db:
+    name: Prepare DB
+    env:
+      DB_HOST: localhost
+      DB_PORT: 3306
+      DB_USERNAME: root
+      DB_PASSWORD: password
+      DB_DATABASE: fastify_todo
+    runs-on: ubuntu-latest
+    services:
+      db:
+        image: mysql:8.0.28
+        ports:
+          - 3306:3306
+        env:
+          MYSQL_ROOT_PASSWORD: password
+        options: >-
+          --health-cmd "mysqladmin ping"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries
+        volumes:
+          - mysql-data:/var/lib/mysql
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - uses: ./.github/actions/setup-node
+
+      - name: Typeorm
+        run: |
+          yarn workspace back createDatabase
+          yarn workspace back migration:run
+
+  backend-test:
+    name: Backend Test
+    env:
+      DB_HOST: localhost
+      DB_PORT: 3306
+      DB_USERNAME: root
+      DB_PASSWORD: password
+      DB_DATABASE: fastify_todo
+    runs-on: ubuntu-latest
+    services:
+      db:
+        image: mysql:8.0.28
+        ports:
+          - 3306:3306
+        env:
+          MYSQL_ROOT_PASSWORD: password
+        options: >-
+          --health-cmd "mysqladmin ping"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+        volumes:
+          - mysql-data:/var/lib/mysql
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - uses: ./.github/actions/setup-node
+
+      - name: Run test
+        id: run-test
+        run: yarn workspace back test
