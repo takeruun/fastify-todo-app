@@ -15,14 +15,13 @@ jobs:
       DB_USERNAME: root
       DB_PASSWORD: password
       DB_DATABASE: fastify_todo
+      MYSQL_ROOT_PASSWORD: password
     runs-on: ubuntu-latest
     services:
       db:
         image: mysql:8.0.28
         ports:
           - 3306:3306
-        env:
-          MYSQL_ROOT_PASSWORD: password
         options: >-
           --health-cmd "mysqladmin ping"
           --health-interval 10s
@@ -51,14 +50,13 @@ jobs:
       DB_USERNAME: root
       DB_PASSWORD: password
       DB_DATABASE: fastify_todo
+      MYSQL_ROOT_PASSWORD: password
     runs-on: ubuntu-latest
     services:
       db:
         image: mysql:8.0.28
         ports:
           - 3306:3306
-        env:
-          MYSQL_ROOT_PASSWORD: password
         options: >-
           --health-cmd "mysqladmin ping"
           --health-interval 10s
