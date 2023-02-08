@@ -42,6 +42,7 @@ jobs:
           yarn workspace back migration:run
 
   backend-test:
+    needs: prepare-db
     name: Backend Test
     env:
       DB_HOST: localhost
