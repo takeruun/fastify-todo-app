@@ -1,6 +1,6 @@
 import { AuthApi } from '@codegen/api/api/auth-api';
 import { Configuration } from '@codegen/api/configuration';
-import { AuthSignUpPostRequest } from '@codegen/api/model';
+import { SignUpRequest } from '@codegen/api/model';
 import axios from 'axios';
 import type { NextPage } from 'next';
 import Head from 'next/head';
@@ -19,7 +19,7 @@ const axiosInstance = axios.create({
 const Home: NextPage = () => {
   const [loginUser, setLoginUser] = useState<{ name: string }>();
 
-  const [loginForm, setLoginForm] = useState<AuthSignUpPostRequest>({ name: '', email: '', password: '' });
+  const [loginForm, setLoginForm] = useState<SignUpRequest>({ name: '', email: '', password: '' });
   const handleChangeName = useCallback((e: ChangeEvent<HTMLInputElement>) => {
     setLoginForm((prev) => ({ ...prev, name: e.target.value }));
   }, []);
@@ -32,7 +32,7 @@ const Home: NextPage = () => {
 
   useEffect(() => {
     const infoGet = async () => {
-      const res = await new AuthApi(configuration, '', axiosInstance).authInfoGet();
+      const res = await new AuthApi(configuration, '', axiosInstance).getMyInfo();
       if (res.data.name) {
         setLoginUser({ name: res.data.name });
       }
@@ -42,7 +42,7 @@ const Home: NextPage = () => {
   }, []);
 
   const handleSignUp = async () => {
-    const res = await new AuthApi(configuration, '', axiosInstance).authSignUpPost(loginForm);
+    const res = await new AuthApi(configuration, '', axiosInstance).signUp(loginForm);
     if (res.data.name) {
       setLoginUser({ name: res.data.name });
     }
