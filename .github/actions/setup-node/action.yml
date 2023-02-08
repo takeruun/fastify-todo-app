@@ -15,7 +15,26 @@ runs:
         restore-keys: |
           ${{ runner.os }}-root-
 
+    - uses: actions/cache@v3
+      id: cache-back
+      with:
+        path: ./back/node_modules
+        key: ${{ runner.os }}-back-${{ hashFiles('**/yarn.lock') }}
+        restore-keys: |
+          ${{ runner.os }}-back-
+
+    - uses: actions/cache@v3
+      id: cache-front
+      with:
+        path: ./front/node_modules
+        key: ${{ runner.os }}-front-${{ hashFiles('**/yarn.lock') }}
+        restore-keys: |
+          ${{ runner.os }}-front-
+
     - name: Install dependencies
-      if: steps.cache-root.outputs.cache-hit != 'true'
+      if: |
+        steps.cache-root.outputs.cache-hit != 'true' ||
+        steps.cache-back.outputs.cache-hit != 'true' ||
+        steps.cache-front.outputs.cache-hit != 'true'
       run: yarn install
       shell: bash
