@@ -15,18 +15,20 @@ jobs:
       DB_USERNAME: root
       DB_PASSWORD: password
       DB_DATABASE: fastify_todo
-      MYSQL_ROOT_PASSWORD: password
     runs-on: ubuntu-latest
     services:
       db:
         image: mysql:8.0.28
         ports:
           - 3306:3306
+        env:
+          MYSQL_ROOT_PASSWORD: password
         options: >-
           --health-cmd "mysqladmin ping"
           --health-interval 10s
           --health-timeout 5s
           --health-retries 5
+          -e MYSQL_ROOT_PASSWORD=password
           --entrypoint sh mysql:8 -c "exec docker-entrypoint.sh mysqld --default-authentication-plugin=mysql_native_password"
         volumes:
           - mysql-data:/var/lib/mysql
@@ -50,18 +52,20 @@ jobs:
       DB_USERNAME: root
       DB_PASSWORD: password
       DB_DATABASE: fastify_todo
-      MYSQL_ROOT_PASSWORD: password
     runs-on: ubuntu-latest
     services:
       db:
         image: mysql:8.0.28
         ports:
           - 3306:3306
+        env:
+          MYSQL_ROOT_PASSWORD: password
         options: >-
           --health-cmd "mysqladmin ping"
           --health-interval 10s
           --health-timeout 5s
           --health-retries 5
+          -e MYSQL_ROOT_PASSWORD=password
           --entrypoint sh mysql:8 -c "exec docker-entrypoint.sh mysqld --default-authentication-plugin=mysql_native_password"
         volumes:
           - mysql-data:/var/lib/mysql
