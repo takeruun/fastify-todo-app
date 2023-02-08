@@ -7,6 +7,7 @@ import fp from './db';
 import { setRoutes } from './routes';
 
 const server = fastify({ logger: true });
+
 server.register(fp);
 
 server.register(fastifySwagger, {
