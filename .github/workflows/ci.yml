@@ -83,11 +83,8 @@ jobs:
         with:
           name: initial-data
 
-      - name: ls initial-data
-        run: ls initial-data
-
       - name: use init.sql
-        run: mysql -uroot -ppassword -h 127.0.0.1 < initial-data
+        run: mysql -uroot -ppassword -h 127.0.0.1 < init.sql
 
       - name: Checkout
         uses: actions/checkout@v3
