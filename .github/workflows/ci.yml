@@ -7,6 +7,19 @@ on:
       - develop
 
 jobs:
+  download:
+    name: Download
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - uses: ./.github/actions/download-sql
+        with:
+          TOKEN: ${{ secrets.TOKEN }}
+
+      - run: ls -l
+
   prepare-db:
     name: Prepare DB
     env:
