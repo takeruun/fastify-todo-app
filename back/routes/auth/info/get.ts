@@ -21,7 +21,7 @@ export const opts = {
 };
 
 export const handler = async (request: FastifyRequest, reply: FastifyReply) => {
-  const user = await getMyInfo(server.db.getRepository(User));
+  const user = await getMyInfo(server.db.getRepository(User), { id: '9521bfc8-d721-44c0-a030-b8a5e5cf1cfe' });
 
   return reply.code(200).send({ id: user.id, name: user.name });
 };
