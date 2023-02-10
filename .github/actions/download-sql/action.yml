@@ -9,8 +9,6 @@ runs:
   steps:
     - name: download
       continue-on-error: true
-      outputs:
-        file_exists: ${{ steps.download.outputs.file_exists }}
       id: download
       shell: bash
       run: |
