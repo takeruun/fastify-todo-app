@@ -39,8 +39,8 @@ jobs:
 
       - name: git
         run: |
-          git fetch origin ${{ github.ref_name }}
-          git log -n 1 origin/${{ github.ref_name }} --pretty=format:"%h" -- ./back
+
+          git log -n 1 origin/main --pretty=format:"%h" -- ./back
 
       # - uses: actions/cache@v3
       #   id: cache
