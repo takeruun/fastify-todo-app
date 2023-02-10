@@ -39,7 +39,7 @@ jobs:
 
       - name: git
         run: |
-
+          git fetch origin main
           git log -n 1 origin/main --pretty=format:"%h" -- ./back
 
       # - uses: actions/cache@v3
