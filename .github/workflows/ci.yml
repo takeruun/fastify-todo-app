@@ -24,20 +24,19 @@ jobs:
       #   with:
       #     TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-      # - run: apt -y update
-      # - run: apt install -y git nodejs
-
       - name: hash
         id: hash
-        run: echo "hash=$(git log -n 1 -- back | grep commit | tr -d 'commit ')" >> $GITHUB_OUTPUT
+        run: echo "hash=$(git log -n 1 --pretty=format:"%h" -- back)" >> $GITHUB_OUTPUT
 
-      - uses: actions/cache@v3
-        id: cache
-        with:
-          path: ./test_nkc.sql
-          key: ${{ runner.os }}-${{ steps.hash.outputs.hash }}
-          restore-keys: |
-            ${{ runner.os }}-
+      - run: echo ${{ steps.hash.outputs.hash }}
+
+      # - uses: actions/cache@v3
+      #   id: cache
+      #   with:
+      #     path: ./test_nkc.sql
+      #     key: ${{ runner.os }}-${{ steps.hash.outputs.hash }}
+      #     restore-keys: |
+      #       ${{ runner.os }}-
 
   # prepare-db:
   #   name: Prepare DB
