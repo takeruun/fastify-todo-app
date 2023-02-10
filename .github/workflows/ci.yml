@@ -37,7 +37,7 @@ jobs:
 
       - run: echo ${{ steps.l-hash.outputs.hash }}
 
-      - run: git log -n 1 ./back
+      - run: git log -n 1 --pretty=format:"%h" ./back
 
       # - uses: actions/cache@v3
       #   id: cache
