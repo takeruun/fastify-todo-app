@@ -12,12 +12,12 @@ runs:
       id: download
       shell: bash
       run: |
-        REPONSE=$(curl -H 'Authorization: token ${{ secrets.GITHUB_TOKEN }}' -H 'Accept: application/vnd.github.v3+json' https://api.github.com/repos/takeruun/fastify-todo-app/actions/artifacts | jq '.artifacts[0]')
+        REPONSE=$(curl -H 'Authorization: token ${{ inputs.TOKEN }}' -H 'Accept: application/vnd.github.v3+json' https://api.github.com/repos/takeruun/fastify-todo-app/actions/artifacts | jq '.artifacts[0]')
         EXPIRED=$(echo $REPONSE | jq '.expired')
         DOWNLOAD_URL=$(echo $REPONSE | jq '.archive_download_url' | tr -d '"')
 
         if [ $EXPIRED = false ]; then
-          curl -L -H 'Authorization: token ${{ secrets.GITHUB_TOKEN }}' $DOWNLOAD_URL -o init.sql
+          curl -L -H 'Authorization: token ${{ inputs.TOKEN }}' $DOWNLOAD_URL -o init.sql
           echo "file_exists=1" >> $GITHUB_OUTPUT
         else
           exit 1

@@ -16,7 +16,7 @@ jobs:
 
       - uses: ./.github/actions/download-sql
         with:
-          TOKEN: ${{ secrets.TOKEN }}
+          TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - run: echo ${{steps.download.outputs.file_exists}}
 
