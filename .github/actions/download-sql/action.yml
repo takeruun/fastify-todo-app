@@ -4,6 +4,10 @@ inputs:
   TOKEN:
     description: github accout token
 
+outputs:
+  file_exists:
+    value: ${{ steps.download.outputs.file_exists }}
+
 runs:
   using: 'composite'
   steps:
@@ -22,7 +26,3 @@ runs:
         else
           exit 1
         fi
-
-    - name: echo
-      shell: bash
-      run: echo ${{steps.download.outputs.file_exists}}
