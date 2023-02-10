@@ -27,11 +27,15 @@ jobs:
       # - run: apt -y update
       # - run: apt install -y git nodejs
 
+      - name: hash
+        id: hash
+        run: echo "hash=$(git log -n 1 -- back | grep commit | tr -d 'commit ')" >> $GITHUB_OUTPUT
+
       - uses: actions/cache@v3
         id: cache
         with:
           path: ./test_nkc.sql
-          key: ${{ runner.os }}-{{ echo $(git log -n 1 -- back | grep commit | tr -d 'commit ')}}
+          key: ${{ runner.os }}-${{ steps.hash.outputs.hash }}
           restore-keys: |
             ${{ runner.os }}-
 
