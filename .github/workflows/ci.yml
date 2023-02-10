@@ -18,7 +18,7 @@ jobs:
         with:
           TOKEN: ${{ secrets.TOKEN }}
 
-      - run: echo steps.download.outputs.file_exists
+      - run: echo ${{steps.download.outputs.file_exists}}
 
   # prepare-db:
   #   name: Prepare DB
