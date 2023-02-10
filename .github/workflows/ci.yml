@@ -18,7 +18,7 @@ jobs:
         with:
           TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-      - run: echo ${{steps.download.outputs.file_exists}}
+      - run: ls -l
 
   # prepare-db:
   #   name: Prepare DB
