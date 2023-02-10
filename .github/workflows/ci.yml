@@ -26,7 +26,8 @@ jobs:
 
       - uses: theowenyoung/folder-hash@v3
         id: l-hash
-        with: back
+        with:
+          path: back
 
       - name: hash
         id: hash
