@@ -6,8 +6,6 @@ inputs:
 
 runs:
   using: 'composite'
-  outputs:
-    file_exists: ${{ steps.download.outputs.file_exists }}
   steps:
     - name: download
       continue-on-error: true
@@ -24,3 +22,5 @@ runs:
         else
           exit 1
         fi
+
+      - run: echo ${{steps.download.outputs.file_exists}}
