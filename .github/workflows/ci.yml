@@ -31,7 +31,7 @@ jobs:
         id: cache
         with:
           path: ./test_nkc.sql
-          key: ${{ runner.os }}-${{ echo $(git log -n 1 -- back | grep commit | tr -d 'commit ')}}
+          key: ${{ runner.os }}-{{ echo $(git log -n 1 -- back | grep commit | tr -d 'commit ')}}
           restore-keys: |
             ${{ runner.os }}-
 
