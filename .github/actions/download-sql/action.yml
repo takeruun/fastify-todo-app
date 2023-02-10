@@ -23,6 +23,6 @@ runs:
           exit 1
         fi
 
-      - name: echo ${{steps.download.outputs.file_exists}}
-          shell: bash
-          run: echo ${{steps.download.outputs.file_exists}}
+    - name: echo
+      shell: bash
+      run: echo ${{steps.download.outputs.file_exists}}
