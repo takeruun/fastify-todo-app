@@ -24,11 +24,16 @@ jobs:
       #   with:
       #     TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
+      - uses: theowenyoung/folder-hash@v3
+        id: l-hash
+
       - name: hash
         id: hash
         run: echo "hash=$(git log -n 1 --pretty=format:"%h" -- back)" >> $GITHUB_OUTPUT
 
       - run: echo ${{ steps.hash.outputs.hash }}
+
+      - run: echo ${{ steps.l-hash.outputs.hash }}
 
       # - uses: actions/cache@v3
       #   id: cache
