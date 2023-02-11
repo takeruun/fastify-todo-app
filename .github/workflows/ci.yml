@@ -24,30 +24,30 @@ jobs:
         id: set-check_diff
         run: echo "check_diff=1" >> $GITHUB_OUTPUT
 
-    check-cache-init-sql:
-      name: Check cache sql data
-      runs-on: ubuntu-latest
-      outputs:
-        file_not_exists: ${{ steps.set-file_not_exists.outputs.file_not_exists }}
-      steps:
-        - name: Check out repository code
-          uses: actions/checkout@v3
+  check-cache-init-sql:
+    name: Check cache sql data
+    runs-on: ubuntu-latest
+    outputs:
+      file_not_exists: ${{ steps.set-file_not_exists.outputs.file_not_exists }}
+    steps:
+      - name: Check out repository code
+        uses: actions/checkout@v3
 
-        - uses: ./.github/actions/migrations-hash
-          id: migrations-hash
+      - uses: ./.github/actions/migrations-hash
+        id: migrations-hash
 
-        - uses: actions/cache@v3
-          id: cache-init-sql
-          with:
-            path: ./init.sql
-            key: ${{ runner.os }}-init-sql-${{ steps.migrations-hash.outputs.hash }}
-            restore-keys: |
-              ${{ runner.os }}-init-sql-
+      - uses: actions/cache@v3
+        id: cache-init-sql
+        with:
+          path: ./init.sql
+          key: ${{ runner.os }}-init-sql-${{ steps.migrations-hash.outputs.hash }}
+          restore-keys: |
+            ${{ runner.os }}-init-sql-
 
-        - name: Set file_not_exists
-          if: steps.cache-init-sql.outputs.cache-hit != 'true'
-          id: set-file_not_exists
-          run: echo "FILE_NOT_EXISTS=1" >> $GITHUB_OUTPUT
+      - name: Set file_not_exists
+        if: steps.cache-init-sql.outputs.cache-hit != 'true'
+        id: set-file_not_exists
+        run: echo "FILE_NOT_EXISTS=1" >> $GITHUB_OUTPUT
 
   migration-db:
     needs: [check-change-migrations, check-cache-init-sql]
