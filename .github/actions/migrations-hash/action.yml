@@ -1,0 +1,15 @@
+name: Get back migrations hash
+
+outputs:
+  hash:
+    value: ${{ steps.set-hash.outputs.hash }}
+
+runs:
+  using: 'composite'
+  steps:
+    - name: back migrations hash
+      id: set-hash
+      shell: bash
+      run: |
+        git fetch origin main
+        echo "hash=$(git log -n 1 origin/main --pretty=format:"%h" -- back/db/migrations)" >> $GITHUB_OUTPUT

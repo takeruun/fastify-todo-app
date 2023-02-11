@@ -12,7 +12,7 @@
     "migrate:create": "yarn typeorm migration:create db/migrations -n",
     "migrate:generate": "yarn typeorm migration:generate db/migrations/migration",
     "migration:run": "yarn typeorm migration:run",
-    "test": "jest --config=./jest.config.js"
+    "test": "jest --config=./jest.config.js --forceExit"
   },
   "dependencies": {
     "@fastify/cors": "^8.2.0",
