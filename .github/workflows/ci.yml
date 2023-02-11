@@ -82,6 +82,9 @@ jobs:
 
       - uses: ./.github/actions/setup-node
 
+      - uses: ./.github/actions/migrations-hash
+        id: migrations-hash
+
       - uses: actions/cache@v3
         with:
           path: ./init.sql
