@@ -47,7 +47,7 @@ jobs:
       - name: Set file_not_exists
         if: steps.cache-init-sql.outputs.cache-hit != 'true'
         id: set-file_not_exists
-        run: echo "FILE_NOT_EXISTS=1" >> $GITHUB_OUTPUT
+        run: echo "file_not_exists=1" >> $GITHUB_OUTPUT
 
   migration-db:
     needs: [check-change-migrations, check-cache-init-sql]
