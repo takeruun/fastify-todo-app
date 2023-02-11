@@ -7,133 +7,153 @@ on:
       - develop
 
 jobs:
-  download:
-    name: Download
+  check-change-migrations:
+    name: Check change migrations
     runs-on: ubuntu-latest
     outputs:
-      FILE_NOT_EXISTS: ${{ steps.FILE_NOT_EXISTS.outputs.FILE_NOT_EXISTS }}
+      check_diff: ${{ steps.set-check_diff.outputs.check_diff }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+      - uses: technote-space/get-diff-action@v6
+        id: check-diff
+        with:
+          PATTERNS: db/migrations/**
+      - name: Set check_diff
+        if: steps.check-diff.outputs.diff
+        id: set-check_diff
+        run: echo "check_diff=1" >> $GITHUB_OUTPUT
+
+    check-cache-init-sql:
+      name: Check cache sql data
+      runs-on: ubuntu-latest
+      outputs:
+        file_not_exists: ${{ steps.set-file_not_exists.outputs.file_not_exists }}
+      steps:
+        - name: Check out repository code
+          uses: actions/checkout@v3
+
+        - uses: ./.github/actions/migrations-hash
+          id: migrations-hash
+
+        - uses: actions/cache@v3
+          id: cache-init-sql
+          with:
+            path: ./init.sql
+            key: ${{ runner.os }}-init-sql-${{ steps.migrations-hash.outputs.hash }}
+            restore-keys: |
+              ${{ runner.os }}-init-sql-
+
+        - name: Set file_not_exists
+          if: steps.cache-init-sql.outputs.cache-hit != 'true'
+          id: set-file_not_exists
+          run: echo "FILE_NOT_EXISTS=1" >> $GITHUB_OUTPUT
+
+  migration-db:
+    needs: [check-change-migrations, check-cache-init-sql]
+    if: |
+      needs.check-change-migrations.outputs.check_diff == 1 ||
+      needs.ccheck-cache-init-sql.outputs.file_not_exists == 1
+    name: Migration DB
+    env:
+      DB_HOST: localhost
+      DB_PORT: 3306
+      DB_USERNAME: root
+      DB_PASSWORD: password
+      DB_DATABASE: fastify_todo
+    runs-on: ubuntu-latest
+    services:
+      db:
+        image: mysql:8.0.28
+        ports:
+          - 3306:3306
+        env:
+          MYSQL_ROOT_PASSWORD: password
+        options: >-
+          --health-cmd "mysqladmin ping"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+          -e MYSQL_ROOT_PASSWORD=password
+          --entrypoint sh mysql:8 -c "exec docker-entrypoint.sh mysqld --default-authentication-plugin=mysql_native_password"
     steps:
       - name: Checkout
         uses: actions/checkout@v3
 
-      - name: Set FILE_NOT_EXISTS
-        id: FILE_NOT_EXISTS
-        run: echo "FILE_NOT_EXISTS=true" >> $GITHUB_OUTPUT
+      - uses: ./.github/actions/setup-node
 
-      # - uses: ./.github/actions/download-sql
-      #   with:
-      #     TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-      - uses: theowenyoung/folder-hash@v3
-        id: l-hash
+      - uses: actions/cache@v3
         with:
-          path: back
+          path: ./init.sql
+          key: ${{ runner.os }}-init-sql-${{ steps.migrations-hash.outputs.hash }}
+          restore-keys: |
+            ${{ runner.os }}-init-sql-
 
-      - name: hash
-        id: hash
-        run: echo "hash=$(git log -n 1 --pretty=format:"%h" -- back)" >> $GITHUB_OUTPUT
-
-      - run: echo ${{ steps.hash.outputs.hash }}
-
-      - run: echo ${{ steps.l-hash.outputs.hash }}
-
-      - name: git
+      - name: Typeorm
         run: |
-          git fetch origin main
-          git log -n 1 origin/main --pretty=format:"%h" -- ./back
+          yarn workspace back createDatabase
+          yarn workspace back migration:run
 
-      # - uses: actions/cache@v3
-      #   id: cache
-      #   with:
-      #     path: ./test_nkc.sql
-      #     key: ${{ runner.os }}-${{ steps.hash.outputs.hash }}
-      #     restore-keys: |
-      #       ${{ runner.os }}-
+      - name: dump
+        run: mysqldump -uroot -ppassword -h 127.0.0.1 fastify_todo > init.sql
 
-  # prepare-db:
-  #   name: Prepare DB
-  #   env:
-  #     DB_HOST: localhost
-  #     DB_PORT: 3306
-  #     DB_USERNAME: root
-  #     DB_PASSWORD: password
-  #     DB_DATABASE: fastify_todo
-  #   runs-on: ubuntu-latest
-  #   services:
-  #     db:
-  #       image: mysql:8.0.28
-  #       ports:
-  #         - 3306:3306
-  #       env:
-  #         MYSQL_ROOT_PASSWORD: password
-  #       options: >-
-  #         --health-cmd "mysqladmin ping"
-  #         --health-interval 10s
-  #         --health-timeout 5s
-  #         --health-retries 5
-  #         -e MYSQL_ROOT_PASSWORD=password
-  #         --entrypoint sh mysql:8 -c "exec docker-entrypoint.sh mysqld --default-authentication-plugin=mysql_native_password"
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v2
+        with:
+          name: init.sql
+          path: init.sql
 
-  #   steps:
-  #     - name: Checkout
-  #       uses: actions/checkout@v3
+  backend-test:
+    needs: [migration-db]
+    if: ${{ !failure() }}
+    name: Backend Test
+    env:
+      DB_HOST: localhost
+      DB_PORT: 3306
+      DB_USERNAME: root
+      DB_PASSWORD: password
+      DB_DATABASE: fastify_todo
+    runs-on: ubuntu-latest
+    services:
+      db:
+        image: mysql:8.0.28
+        ports:
+          - 3306:3306
+        env:
+          MYSQL_ROOT_PASSWORD: password
+        options: >-
+          --health-cmd "mysqladmin ping"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+          -e MYSQL_ROOT_PASSWORD=password
+          --entrypoint sh mysql:8 -c "exec docker-entrypoint.sh mysqld --default-authentication-plugin=mysql_native_password"
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
 
-  #     - uses: ./.github/actions/setup-node
+      - uses: ./.github/actions/migrations-hash
+        id: migrations-hash
 
-  #     - name: Typeorm
-  #       run: |
-  #         yarn workspace back createDatabase
-  #         yarn workspace back migration:run
+      - uses: actions/cache@v3
+        id: cache-init-sql
+        with:
+          path: ./init.sql
+          key: ${{ runner.os }}-init-sql-${{ steps.migrations-hash.outputs.hash }}
+          restore-keys: |
+            ${{ runner.os }}-init-sql-
 
-  #     - name: dump
-  #       run: |
-  #         mkdir mysql/data
-  #         mysqldump -uroot -ppassword -h 127.0.0.1 -x --all-databases > mysql/data/init.sql
+      - name: Download artifacts
+        if: steps.cache-init-sql.outputs.cache-hit != 'true'
+        uses: actions/download-artifact@v2
+        with:
+          name: init.sql
 
-  #     - name: Upload artifacts
-  #       uses: actions/upload-artifact@v2
-  #       with:
-  #         name: initial-data
-  #         path: mysql/data
+      - name: use init.sql
+        run: mysql -uroot -ppassword -h 127.0.0.1 fastify_todo < init.sql
 
-  # backend-test:
-  #   needs: prepare-db
-  #   name: Backend Test
-  #   env:
-  #     DB_HOST: localhost
-  #     DB_PORT: 3306
-  #     DB_USERNAME: root
-  #     DB_PASSWORD: password
-  #     DB_DATABASE: fastify_todo
-  #   runs-on: ubuntu-latest
-  #   services:
-  #     db:
-  #       image: mysql:8.0.28
-  #       ports:
-  #         - 3306:3306
-  #       env:
-  #         MYSQL_ROOT_PASSWORD: password
-  #       options: >-
-  #         --health-cmd "mysqladmin ping"
-  #         --health-interval 10s
-  #         --health-timeout 5s
-  #         --health-retries 5
-  #         -e MYSQL_ROOT_PASSWORD=password
-  #         --entrypoint sh mysql:8 -c "exec docker-entrypoint.sh mysqld --default-authentication-plugin=mysql_native_password"
-  #   steps:
-  #     - name: Download artifacts
-  #       uses: actions/download-artifact@v2
-  #       with:
-  #         name: initial-data
+      - uses: ./.github/actions/setup-node
 
-  #     - name: use init.sql
-  #       run: mysql -uroot -ppassword -h 127.0.0.1 < init.sql
-
-  #     - name: Checkout
-  #       uses: actions/checkout@v3
-
-  #     - uses: ./.github/actions/setup-node
-
-  #     - name: Run test
-  #       id: run-test
-  #       run: yarn workspace back test
+      - name: Run test
+        id: run-test
+        run: yarn workspace back test
