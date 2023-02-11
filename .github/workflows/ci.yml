@@ -53,7 +53,7 @@ jobs:
     needs: [check-change-migrations, check-cache-init-sql]
     if: |
       needs.check-change-migrations.outputs.check_diff == 1 ||
-      needs.ccheck-cache-init-sql.outputs.file_not_exists == 1
+      needs.check-cache-init-sql.outputs.file_not_exists == 1
     name: Migration DB
     env:
       DB_HOST: localhost
