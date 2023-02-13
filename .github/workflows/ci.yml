@@ -7,6 +7,9 @@ on:
       - develop
 
 jobs:
+  sample:
+    uses: ./sample.yml
+
   check-change-migrations:
     name: Check change migrations
     runs-on: ubuntu-latest
