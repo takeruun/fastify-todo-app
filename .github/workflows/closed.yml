@@ -1,10 +1,8 @@
 name: CI
 
 on:
-  push:
-    branches-ignore:
-      - main
-      - develop
+  pull_request:
+    types: [closed]
 
 jobs:
   sample:
@@ -22,7 +20,7 @@ jobs:
       - uses: technote-space/get-diff-action@v6
         id: check-diff
         with:
-          PATTERNS: back/db/migrations/**
+          PATTERNS: db/migrations/**
       - name: Set check_diff
         if: steps.check-diff.outputs.diff
         id: set-check_diff
