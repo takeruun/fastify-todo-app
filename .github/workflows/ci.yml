@@ -36,7 +36,7 @@ jobs:
       - run: echo ${{ env.GIT_DIFF }}
       - run: echo ${{ env.GIT_DIFF_FILTERED }}
       - name: Set check_diff
-        if: steps.check-diff.outputs.diff != 'true'
+        if: steps.check-diff.outputs.diff
         id: set-check_diff
         run: echo "check_diff=1" >> $GITHUB_OUTPUT
 
@@ -59,6 +59,8 @@ jobs:
           key: ${{ runner.os }}-init-sql-${{ steps.migrations-hash.outputs.hash }}
           restore-keys: |
             ${{ runner.os }}-init-sql-
+
+      - run: echo ${{steps.cache-init-sql.outputs.cache-hit}}
 
       - name: Set file_not_exists
         if: steps.cache-init-sql.outputs.cache-hit != 'true'
