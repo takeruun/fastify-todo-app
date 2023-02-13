@@ -22,7 +22,7 @@ jobs:
       - uses: technote-space/get-diff-action@v6
         id: check-diff
         with:
-          PATTERNS: db/migrations/**
+          PATTERNS: back/db/migrations/**
       - name: Set check_diff
         if: steps.check-diff.outputs.diff
         id: set-check_diff
