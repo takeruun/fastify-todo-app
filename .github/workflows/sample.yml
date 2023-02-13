@@ -1,5 +1,11 @@
 name: CI
 
+on:
+  push:
+    branches-ignore:
+      - main
+      - develop
+
 jobs:
   ls:
     name: ls -l
