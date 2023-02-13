@@ -1,8 +1,10 @@
-name: CI
+name: Closed CI
 
 on:
   pull_request:
     types: [closed]
+    branches:
+      - main
 
 jobs:
   sample:
