@@ -8,7 +8,7 @@ on:
 
 jobs:
   sample:
-    uses: ./sample.yml
+    uses: ./.github/workflows/sample.yml
 
   check-change-migrations:
     name: Check change migrations
