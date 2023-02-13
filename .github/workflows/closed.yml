@@ -1,23 +1,13 @@
-name: CI
+name: Closed CI
 
 on:
-  push:
-    branches-ignore:
+  pull_request:
+    types: [closed]
+    branches:
       - main
-      - develop
 
 jobs:
-  sample-1:
-    name: sample 1
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v3
-
-      - run: echo 'HELLO'
-
   sample:
-    needs: [sample-1]
     uses: ./.github/workflows/sample.yml
 
   check-change-migrations:
@@ -32,7 +22,7 @@ jobs:
       - uses: technote-space/get-diff-action@v6
         id: check-diff
         with:
-          PATTERNS: back/db/migrations/**
+          PATTERNS: db/migrations/**
       - run: echo ${{ env.GIT_DIFF }}
       - run: echo ${{ env.GIT_DIFF_FILTERED }}
       - name: Set check_diff
