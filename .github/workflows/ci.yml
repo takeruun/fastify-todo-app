@@ -7,7 +7,17 @@ on:
       - develop
 
 jobs:
+  sample-1:
+    name: sample 1
+    runs-on: ubuntu-latest
+  steps:
+    - name: Checkout
+      uses: actions/checkout@v3
+
+    - run: echo 'HELLO'
+
   sample:
+    needs: [sample-1]
     uses: ./.github/workflows/sample.yml
 
   check-change-migrations:
