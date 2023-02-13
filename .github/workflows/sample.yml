@@ -1,11 +1,7 @@
-name: CI
+name: LS
 
 on:
   workflow_call:
-  push:
-    branches-ignore:
-      - main
-      - develop
 
 jobs:
   ls:

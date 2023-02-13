@@ -11,6 +11,7 @@ jobs:
     uses: ./.github/workflows/sample.yml
 
   check-change-migrations:
+    needs: [sample]
     name: Check change migrations
     runs-on: ubuntu-latest
     outputs:
