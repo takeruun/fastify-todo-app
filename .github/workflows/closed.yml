@@ -26,7 +26,7 @@ jobs:
       - run: echo ${{ env.GIT_DIFF }}
       - run: echo ${{ env.GIT_DIFF_FILTERED }}
       - name: Set check_diff
-        if: steps.check-diff.outputs.diff != true
+        if: steps.check-diff.outputs.diff != 'true'
         id: set-check_diff
         run: echo "check_diff=1" >> $GITHUB_OUTPUT
 
