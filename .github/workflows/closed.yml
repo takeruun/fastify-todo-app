@@ -7,11 +7,7 @@ on:
       - main
 
 jobs:
-  sample:
-    uses: ./.github/workflows/sample.yml
-
   check-change-migrations:
-    needs: [sample]
     name: Check change migrations
     runs-on: ubuntu-latest
     outputs:
@@ -19,14 +15,17 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v3
+
       - uses: technote-space/get-diff-action@v6
         id: check-diff
         with:
           PATTERNS: db/migrations/**
+
       - run: echo ${{ env.GIT_DIFF }}
       - run: echo ${{ env.GIT_DIFF_FILTERED }}
+
       - name: Set check_diff
-        if: steps.check-diff.outputs.diff != 'true'
+        if: steps.check-diff.outputs.diff
         id: set-check_diff
         run: echo "check_diff=1" >> $GITHUB_OUTPUT
 
