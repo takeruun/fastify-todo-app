@@ -14,7 +14,7 @@ runs:
     - name: Checkout
       uses: actions/checkout@v3
       with:
-        ref: steps.set-branch.outputs.branch
+        ref: ${{steps.set-branch.outputs.branch}}
         fetch-depth: 0
 
     - run: echo ${GITHUB_REF#refs/heads/}
