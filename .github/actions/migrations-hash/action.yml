@@ -11,9 +11,11 @@ runs:
       uses: actions/checkout@v3
       with:
         path: back/db/migrations
+        fetch-depth: 0
 
     - name: back migrations hash
       id: set-hash
       shell: bash
       run: |
         echo "hash=$(git log -n 1 --pretty=format:"%h" -- back/db/migrations)" >> $GITHUB_OUTPUT
+        echo $hash
