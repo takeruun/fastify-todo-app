@@ -54,7 +54,7 @@ jobs:
       - uses: ./.github/actions/migrations-hash
         id: migrations-hash
         with:
-          ref: ${{GITHUB_REF#refs/heads/}}
+          ref: GITHUB_REF#refs/heads/
 
       - name: git log -4
         run: |
