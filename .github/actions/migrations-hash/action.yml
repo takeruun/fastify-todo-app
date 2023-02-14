@@ -1,8 +1,5 @@
 name: Get back migrations hash
 
-inputs:
-  ref:
-    description: branch
 outputs:
   hash:
     value: ${{ steps.set-hash.outputs.hash }}
@@ -13,8 +10,10 @@ runs:
     - name: Checkout
       uses: actions/checkout@v3
       with:
-        ref: ${{inputs.ref}}
         fetch-depth: 0
+
+    - run: echo ${GITHUB_REF#refs/heads/}
+      shell: bash
 
     - name: back migrations hash
       id: set-hash
