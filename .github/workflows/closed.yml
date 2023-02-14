@@ -51,6 +51,8 @@ jobs:
 
       - uses: ./.github/actions/migrations-hash
         id: migrations-hash
+        with:
+          input: ${GITHUB_REF#refs/heads/}
 
       - uses: actions/cache@v3
         id: cache-init-sql
