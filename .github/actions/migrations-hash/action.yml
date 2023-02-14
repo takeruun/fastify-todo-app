@@ -1,7 +1,8 @@
 name: Get back migrations hash
 
 inputs:
-  ref: branch
+  ref:
+    description: branch
 outputs:
   hash:
     value: ${{ steps.set-hash.outputs.hash }}
@@ -12,7 +13,7 @@ runs:
     - name: Checkout
       uses: actions/checkout@v3
       with:
-        ref: ref
+        ref: inputs.ref
         fetch-depth: 0
 
     - name: back migrations hash
