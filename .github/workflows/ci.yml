@@ -7,6 +7,17 @@ on:
       - develop
 
 jobs:
+  echo-branch:
+    name: echo branch
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - run: echo ${GITHUB_REF#refs/heads/}
+
+      - run: echo ${{github.head_ref}}
+
   check-change-migrations:
     name: Check change migrations
     runs-on: ubuntu-latest
