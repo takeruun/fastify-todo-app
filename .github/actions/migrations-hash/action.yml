@@ -7,11 +7,18 @@ outputs:
 runs:
   using: 'composite'
   steps:
+    - id: set-branch
+      shell: bash
+      run: echo "branch=${GITHUB_REF#refs/heads/}" >> $GITHUB_OUTPUT
+
     - name: Checkout
       uses: actions/checkout@v3
       with:
-        ref: feature/sample
+        ref: ${{steps.set-branch.outputs.branch}}
         fetch-depth: 0
+
+    - run: echo ${GITHUB_REF#refs/heads/}
+      shell: bash
 
     - name: back migrations hash
       id: set-hash
